@@ -1,29 +1,55 @@
+### ------------------------------------------------------------- ### 
+### IMPORTAÇÕES
 from flask import Flask, request, jsonify, render_template
 import json
 import os
 
+
+### ------------------------------------------------------------- ### 
+### FAZER FUNCIONAR
 app = Flask(__name__)
-
-# Caminho do arquivo JSON
-data_file = "data.json"
-
-# Tenta carregar os dados do arquivo JSON, caso contrário, inicializa os dados com estrutura vazia.
+data_file = "data.json" 
 try:
     with open(data_file, "r") as f:
         data = json.load(f)
 except FileNotFoundError:
     data = {"contacts": [], "logs": []}
 
-# Renderizar páginas
-@app.route('/')
+### ------------------------------------------------------------- ### 
+### FUNÇÃO PARA SALVAR OS DADOS
+def save_data():
+    try:
+        with open(data_file, "w") as f:
+            json.dump(data, f, indent=4) 
+        print("Dados salvos com sucesso!")  
+    except Exception as e:
+        print(f"Erro ao salvar dados: {str(e)}") 
+
+
+### ------------------------------------------------------------- ### 
+### OBTER TODOS OS CONTATOS
+@app.route('/get_contacts', methods=['GET'])
+def get_contacts():
+    return jsonify(data["contacts"]) 
+
+
+### ------------------------------------------------------------- ### 
+### RENDER DA PAGINA
+@app.route('/') #index.html
 def index():
-    return render_template('index.html')  # Página inicial (index.html)
+    return render_template('index.html')  
 
-@app.route('/edit_contacts')
+@app.route('/edit_contacts') #edit_contacts.html
 def edit_contacts():
-    return render_template('edit_contacts.html')  # Página de edição de contatos (edit_contacts.html)
+    return render_template('edit_contacts.html')  
 
-# Rota para adicionar um novo contato com método POST
+@app.route('/selecao') #selecao.html
+def selecao():
+    return render_template('selecao.html')
+
+
+### ------------------------------------------------------------- ### 
+### ADICIONAR NOVO CONTATO
 @app.route('/add_contact', methods=['POST'])
 def add_contact():
     try:
@@ -37,12 +63,10 @@ def add_contact():
         return jsonify({"message": "Contato adicionado com sucesso!"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 
-# Rota para obter todos os contatos com método GET
-@app.route('/get_contacts', methods=['GET'])
-def get_contacts():
-    return jsonify(data["contacts"])  # Retorna os contatos armazenados no JSON
-
+### ------------------------------------------------------------- ### 
+### EDITAR CONTATOS
 @app.route('/edit_contacts/<int:index>', methods=['PUT'])
 def edit_contact(index):
     try:
@@ -66,19 +90,8 @@ def edit_contact(index):
         return jsonify({"error": f"Erro ao processar a requisição: {str(e)}"}), 500
 
 
-
-
-# Função para salvar os dados atualizados no arquivo JSON
-def save_data():
-    try:
-        # Certifique-se de que o caminho do arquivo está correto
-        with open(data_file, "w") as f:
-            json.dump(data, f, indent=4)  # Salva os dados no arquivo com formatação
-        print("Dados salvos com sucesso!")  # Mensagem de confirmação no console
-    except Exception as e:
-        print(f"Erro ao salvar dados: {str(e)}")  # Exibe o erro, se houver
-
-# Rota para apagar um contato pelo índice
+### ------------------------------------------------------------- ### 
+### APAGAR CONTATO
 @app.route('/delete_contact/<int:index>', methods=['DELETE'])
 def delete_contact(index):
     try:
@@ -93,12 +106,18 @@ def delete_contact(index):
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/selecao')
-def selecao():
-    return render_template('selecao.html')
+### ------------------------------------------------------------- ### 
+### 
+
+### ------------------------------------------------------------- ### 
+### 
+
+
+
+### ------------------------------------------------------------- ### 
+### ENVIAR MENSAGEM
 
 import urllib.parse
-
 @app.route('/send_message', methods=['POST'])
 def send_message():
     try:
@@ -120,14 +139,8 @@ def send_message():
         return jsonify({"error": f"Erro ao enviar mensagens: {str(e)}"}), 500
 
 
-
-
-
-
-
-
+### ------------------------------------------------------------- ### 
 
 # Inicia o servidor
 if __name__ == '__main__':
     app.run(debug=True)
-
