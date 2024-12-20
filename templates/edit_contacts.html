@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Contatos</title>
+
+    <style>
+        .contact-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .contact-item {
+            margin-bottom: 10px;
+        }
+
+        .contact-item button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/">Voltar</a>
+
+    <section class="container">
+        <h1>Adicionar Pessoa</h1>
+
+        <form id="addContactForm">
+            <input type="text" id="name" placeholder="Nome" required>
+            <input type="tel" id="phone" placeholder="Número de WhatsApp" required>
+            <button type="submit">Adicionar Contato</button>
+        </form>
+    </section>
+
+    <section>
+        <h1>Contatos</h1>
+        <ul id="contactsList">
+            <!-- Lista de contatos será preenchida aqui -->
+        </ul>
+
+        <form id="editForm" style="display: none;" onsubmit="saveEdit(event)">
+            <h2>Editar Contato</h2>
+            <label for="editName">Nome:</label>
+            <input type="text" id="editName" required />
+            <label for="editPhone">Telefone:</label>
+            <input type="text" id="editPhone" required />
+            <button type="submit" id="saveEdit" data-index="">Salvar</button>
+            <button type="button" onclick="cancelEdit()">Cancelar</button>
+        </form>
+    </section>
+
+    <script src="../static/edit_contacts.js"></script>
+
+</body>
+
+</html>
