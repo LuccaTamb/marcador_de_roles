@@ -92,6 +92,42 @@ def delete_contact(index):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+@app.route('/selecao')
+def selecao():
+    return render_template('selecao.html')
+
+import urllib.parse
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    try:
+        data = request.json
+        contacts = data.get("contacts")
+        message = data.get("message")
+
+        # URL encode the message to handle special characters
+        encoded_message = urllib.parse.quote(message)
+
+        # Para cada contato, você pode gerar a URL do WhatsApp
+        links = []
+        for contact in contacts:
+            whatsapp_link = f"https://wa.me/{contact}?text={encoded_message}"
+            links.append(whatsapp_link)
+
+        return jsonify({"message": "Mensagens enviadas com sucesso!", "links": links}), 200
+    except Exception as e:
+        return jsonify({"error": f"Erro ao enviar mensagens: {str(e)}"}), 500
+
+
+
+
+
+
+
+
+
 # Inicia o servidor
 if __name__ == '__main__':
     app.run(debug=True)
+

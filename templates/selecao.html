@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de Contatos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <a href="/">Voltar</a>
+
+    <h1>Seleção de Contatos</h1>
+
+    <table id="contactsTable">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="selectAll" onclick="selectAllContacts()"> Selecionar Todos</th>
+                <!-- <th>ID</th> -->
+                <th>Nome</th>
+                <th>Telefone</th>
+            </tr>
+        </thead>
+        <tbody id="contactsList">
+            <!-- Lista de contatos será carregada aqui -->
+        </tbody>
+    </table>
+
+    <!-- Textarea para digitar a mensagem -->
+    <textarea id="messageTextarea" placeholder="Digite sua mensagem aqui"></textarea>
+
+    <button onclick="sendMessage()">Enviar Mensagem</button>
+
+    <script src="../static/selecao.js"></script>
+</body>
+</html>
